@@ -536,7 +536,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </span>
               <div>
                 <h3 className="text-xl font-black text-slate-900">ترخيص فصلي معتمد</h3>
-                <p className="text-xs text-slate-500 mt-1">تحويل فوري عبر uPay الراجحي (0548171965)</p>
+                <p className="text-xs text-slate-500 mt-1">سداد عبر متجر سلة الإلكتروني أو uPay الراجحي</p>
               </div>
               <div className="text-3xl font-black text-emerald-700">500 <span className="text-xs font-normal text-slate-500">ريال / فصل دراسي</span></div>
               
@@ -555,17 +555,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>سداد سريع ومباشر عبر uPay الراجحي</span>
+                  <span>سداد سريع ومباشر عبر متجر سلة الإلكتروني</span>
                 </li>
               </ul>
             </div>
 
             <div className="space-y-2">
-              <button
-                onClick={() => onOpenPaymentModal ? onOpenPaymentModal('semester') : onOpenRegisterSchool()}
+              <a
+                href="https://salla.sa/Misstark"
+                target="_blank"
+                rel="noreferrer"
                 className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition-colors cursor-pointer shadow-xs flex items-center justify-center gap-1.5"
               >
-                <span>سداد واشتراك بالفصل (500 ريال) ↵</span>
+                <span>🛒 سداد عبر متجر سلة (500 ريال) ↵</span>
+              </a>
+              <button
+                onClick={() => onOpenPaymentModal ? onOpenPaymentModal('semester') : onOpenRegisterSchool()}
+                className="w-full py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-bold text-xs border border-emerald-200 transition-colors cursor-pointer flex items-center justify-center gap-1"
+              >
+                <span>خيارات التحويل الأخرى (uPay)</span>
               </button>
             </div>
           </div>
@@ -582,7 +590,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </span>
               <div>
                 <h3 className="text-xl font-black text-slate-900">ترخيص سنوي شامل</h3>
-                <p className="text-xs text-slate-500 mt-1">تحويل فوري عبر uPay الراجحي (0548171965)</p>
+                <p className="text-xs text-slate-500 mt-1">سداد عبر متجر سلة الإلكتروني أو uPay الراجحي</p>
               </div>
               <div className="text-3xl font-black text-emerald-700">950 <span className="text-xs font-normal text-slate-500">ريال / سنة دراسية</span></div>
               
@@ -601,17 +609,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>أولوية في الدعم الفني وتحديثات مستمرة</span>
+                  <span>سداد مباشر وموثوق عبر متجر سلة</span>
                 </li>
               </ul>
             </div>
 
             <div className="space-y-2">
-              <button
-                onClick={() => onOpenPaymentModal ? onOpenPaymentModal('yearly') : onOpenRegisterSchool()}
+              <a
+                href="https://salla.sa/Misstark"
+                target="_blank"
+                rel="noreferrer"
                 className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-xs transition-colors cursor-pointer shadow-xs flex items-center justify-center gap-1.5"
               >
-                <span>سداد واشتراك بالسنة (950 ريال) ↵</span>
+                <span>🛒 سداد عبر متجر سلة (950 ريال) ↵</span>
+              </a>
+              <button
+                onClick={() => onOpenPaymentModal ? onOpenPaymentModal('yearly') : onOpenRegisterSchool()}
+                className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-1"
+              >
+                <span>خيارات التحويل الأخرى (uPay)</span>
               </button>
             </div>
           </div>

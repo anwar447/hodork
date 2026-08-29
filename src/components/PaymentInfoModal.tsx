@@ -218,6 +218,25 @@ export const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
                 </div>
               </div>
 
+              {/* Salla Store Direct Payment Button */}
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
+                <div className="text-center sm:text-right">
+                  <div className="font-black text-sm text-slate-950 flex items-center gap-1.5 justify-center sm:justify-start">
+                    <span>🛒 السداد الفوري عبر متجر سلة الإلكتروني</span>
+                    <span className="px-2 py-0.5 rounded-full bg-slate-950 text-white text-[10px] font-bold">موصى به</span>
+                  </div>
+                  <p className="text-[11px] text-slate-900 font-medium">سداد بمدى، فيزا، ماستركارد، Apple Pay، أو STC Pay بأمان وسرعة</p>
+                </div>
+                <a
+                  href="https://salla.sa/Misstark"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="shrink-0 px-5 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-900 text-white font-black text-xs transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span>الدفع الآن عبر متجر سلة ↵</span>
+                </a>
+              </div>
+
               {/* Mobile Number Box for Transfer */}
               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <div className="space-y-1 text-center sm:text-right">
