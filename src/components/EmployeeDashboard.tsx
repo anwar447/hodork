@@ -33,6 +33,7 @@ import { DailyPrincipalReportModal } from './DailyPrincipalReportModal';
 import { AdminArchiveReportModal } from './AdminArchiveReportModal';
 import { ClassExcelManagerModal } from './ClassExcelManagerModal';
 import { StudentDossierModal } from './StudentDossierModal';
+import { InteractiveMapPicker } from './InteractiveMapPicker';
 import { 
   Building2, Users, AlertTriangle, UserCheck, UserX, Clock, 
   Search, Filter, Download, Upload, Plus, KeyRound, Bell, 
@@ -147,6 +148,8 @@ export const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({
   const [branchManager, setBranchManager] = useState('');
   const [branchIsQuran, setBranchIsQuran] = useState(false);
   const [branchRadius, setBranchRadius] = useState(300);
+  const [branchLat, setBranchLat] = useState(24.7136);
+  const [branchLng, setBranchLng] = useState(46.6753);
   const [branchAddress, setBranchAddress] = useState('طريق الملك فهد، الرياض');
 
   // Excuse Rejection Modal state
@@ -520,8 +523,8 @@ export const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({
         dismissal: '13:00',
       },
       geofence: {
-        lat: 24.7136,
-        lng: 46.6753,
+        lat: branchLat,
+        lng: branchLng,
         radius: Number(branchRadius) || 300,
         addressName: branchAddress.trim() || 'طريق الملك فهد، الرياض',
       },
@@ -2527,6 +2530,24 @@ export const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({
                 </label>
               </div>
 
+              {/* Interactive Visual Map Picker for Branch */}
+              <div className="space-y-1.5 pt-1">
+                <label className="block font-bold text-slate-800 text-xs">
+                  تحديد موقع الفرع أو المدرسة بالدبوس على الخريطة:
+                </label>
+                <InteractiveMapPicker
+                  latitude={branchLat}
+                  longitude={branchLng}
+                  radius={branchRadius}
+                  onChange={({ lat, lng, address }) => {
+                    setBranchLat(lat);
+                    setBranchLng(lng);
+                    if (address) setBranchAddress(address);
+                  }}
+                  height="240px"
+                />
+              </div>
+
               <div>
                 <label className="block font-bold text-slate-700 mb-1">نصف قطر البصمة الجغرافية (بالمتر)</label>
                 <input
@@ -2656,6 +2677,30 @@ export const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({
                     className="w-full bg-white border border-slate-300 rounded-xl px-2 py-1.5 font-mono font-bold text-slate-900"
                   />
                 </div>
+              </div>
+
+              {/* Interactive Visual Map Picker for Geofence */}
+              <div className="space-y-1.5 pt-1">
+                <label className="block font-bold text-slate-800 text-xs">
+                  تحديد موقع المدرسة الجغرافي بالدبوس على الخريطة:
+                </label>
+                <InteractiveMapPicker
+                  latitude={schoolToEdit.geofence.lat || 24.7136}
+                  longitude={schoolToEdit.geofence.lng || 46.6753}
+                  radius={schoolToEdit.geofence.radius || 300}
+                  onChange={({ lat, lng, address }) => {
+                    setSchoolToEdit({
+                      ...schoolToEdit,
+                      geofence: {
+                        ...schoolToEdit.geofence,
+                        lat: lat,
+                        lng: lng,
+                        addressName: address || schoolToEdit.geofence.addressName,
+                      },
+                    });
+                  }}
+                  height="260px"
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-2">

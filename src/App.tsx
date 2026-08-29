@@ -457,23 +457,6 @@ export default function App() {
 
       </main>
 
-      {/* Floating Role Switcher Pill for Superadmin or Quick Role Demo when users exist */}
-      {currentUser?.role === 'superadmin' && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 bg-slate-900/90 text-white backdrop-blur-md px-4 py-2 rounded-full shadow-2xl border border-white/20 flex items-center gap-3 text-xs">
-          <button
-            onClick={() => setIsDemoSwitcherOpen(true)}
-            className="flex items-center gap-1.5 font-bold hover:text-emerald-400 transition-colors cursor-pointer"
-          >
-            <Sparkles className="w-4 h-4 text-amber-400 animate-spin" style={{ animationDuration: '4s' }} />
-            <span>لوحة تجربة الأدوار</span>
-          </button>
-          <span className="opacity-30">|</span>
-          <span className="text-[11px] text-slate-300 font-medium">
-            المشرف العام (مالك المنظومة)
-          </span>
-        </div>
-      )}
-
       {/* PWA App Install Suggestion Banner */}
       <InstallAppBanner />
 
@@ -484,17 +467,7 @@ export default function App() {
         schools={schools}
         users={users}
         onLoginSuccess={handleSelectUser}
-        onOpenDemoSwitcher={() => setIsDemoSwitcherOpen(true)}
-      />
-
-      <DemoSwitcher
-        isOpen={isDemoSwitcherOpen}
-        onClose={() => setIsDemoSwitcherOpen(false)}
-        users={users}
-        schools={schools}
-        currentUser={currentUser}
-        onSelectUser={handleSelectUser}
-        onResetData={handleResetData}
+        onOpenDemoSwitcher={() => {}}
       />
 
       <SchoolCreationWizard

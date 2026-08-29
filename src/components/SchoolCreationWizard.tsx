@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { School, User, SchoolTimings, Geofence, SubscriptionPlan } from '../types';
 import { triggerNotification } from '../utils/notifications';
+import { InteractiveMapPicker } from './InteractiveMapPicker';
 
 interface SchoolCreationWizardProps {
   isOpen: boolean;
@@ -409,22 +410,37 @@ export const SchoolCreationWizard: React.FC<SchoolCreationWizardProps> = ({
           {step === 2 && (
             <div className="space-y-4 animate-fadeIn">
               <div className="border-b border-slate-100 pb-3">
-                <h3 className="text-base font-black text-slate-900">الخطوة 2: ضبط السياج الجغرافي للمدرسة (Geofence)</h3>
+                <h3 className="text-base font-black text-slate-900">الخطوة 2: خريطة تحديد موقع المدرسة والسياج الجغرافي (Geofence)</h3>
                 <p className="text-slate-500 mt-0.5">
-                  لا يستطيع الطالب تسجيل الحضور إلا عند تواجده داخل هذا النطاق الجغرافي
+                  حدد موقع المدرسة مباشرة بوضع الدبوس على الخريطة أو زر موقعي الحالي (GPS)
                 </p>
               </div>
 
-              {/* City Presets */}
+              {/* Interactive Visual Map Picker */}
+              <InteractiveMapPicker
+                latitude={latitude}
+                longitude={longitude}
+                radius={radius}
+                onChange={({ lat, lng, address }) => {
+                  setLatitude(lat);
+                  setLongitude(lng);
+                  if (address) {
+                    setAddressName(address);
+                  }
+                }}
+                height="320px"
+              />
+
+              {/* City Presets Quick Jump */}
               <div>
-                <label className="block font-bold text-slate-800 mb-2">اختر موقعاً سريعاً أو حدد الإحداثيات:</label>
-                <div className="flex flex-wrap gap-2">
+                <label className="block font-bold text-slate-800 mb-1.5 text-xs">أو انتقل سريعاً لمدينة رئيسية:</label>
+                <div className="flex flex-wrap gap-1.5">
                   {SAUDI_CITY_PRESETS.map((preset, idx) => (
                     <button
                       key={idx}
                       type="button"
                       onClick={() => handleSelectPresetLocation(preset)}
-                      className={`px-3 py-1.5 rounded-xl border text-[11px] font-bold transition-all cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-lg border text-[11px] font-bold transition-all cursor-pointer ${
                         latitude === preset.lat && longitude === preset.lng
                           ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
                           : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
@@ -433,30 +449,6 @@ export const SchoolCreationWizard: React.FC<SchoolCreationWizardProps> = ({
                       {preset.name}
                     </button>
                   ))}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <div>
-                  <label className="block font-bold text-slate-850 mb-1">خط العرض (Latitude)</label>
-                  <input
-                    type="number"
-                    step="0.0001"
-                    value={latitude}
-                    onChange={(e) => setLatitude(parseFloat(e.target.value))}
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 font-mono font-bold text-slate-800"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-bold text-slate-850 mb-1">خط الطول (Longitude)</label>
-                  <input
-                    type="number"
-                    step="0.0001"
-                    value={longitude}
-                    onChange={(e) => setLongitude(parseFloat(e.target.value))}
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 font-mono font-bold text-slate-800"
-                  />
                 </div>
               </div>
 
@@ -474,30 +466,30 @@ export const SchoolCreationWizard: React.FC<SchoolCreationWizardProps> = ({
 
                 <input
                   type="range"
-                  min="100"
+                  min="50"
                   max="1000"
-                  step="50"
+                  step="25"
                   value={radius}
                   onChange={(e) => setRadius(parseInt(e.target.value))}
                   className="w-full accent-emerald-600 cursor-pointer"
                 />
 
                 <div className="flex justify-between text-[10px] text-slate-400 font-mono">
-                  <span>100 متر (مبنى صغير)</span>
+                  <span>50 متر (مبنى صغير)</span>
                   <span>300 متر (مبنى متوسط)</span>
                   <span>600 متر (مجمع كبير)</span>
-                  <span>1000 متر (حرم جامعي/واسع)</span>
+                  <span>1000 متر (حرم واسع)</span>
                 </div>
               </div>
 
               <div>
-                <label className="block font-bold text-slate-800 mb-1">العنوان الوصفي / الحي والشارع</label>
+                <label className="block font-bold text-slate-800 mb-1 text-xs">العنوان الوصفي / الحي والشارع</label>
                 <input
                   type="text"
                   placeholder="مثال: حي الروضة - طريق الملك فهد"
                   value={addressName}
                   onChange={(e) => setAddressName(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-medium"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-medium text-xs"
                 />
               </div>
 

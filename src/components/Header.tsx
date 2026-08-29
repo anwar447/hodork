@@ -127,18 +127,6 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
 
-            {/* Super Admin Quick Switcher Button */}
-            {currentUser?.role === 'superadmin' && (
-              <button
-                id="header-demo-switcher-btn"
-                onClick={onOpenDemoSwitcher}
-                className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-purple-100 hover:bg-purple-200 text-purple-900 border border-purple-200 text-xs font-bold transition-all cursor-pointer shadow-2xs"
-              >
-                <Sparkles className="w-4 h-4 text-purple-600" />
-                <span className="hidden sm:inline">لوحة الأدوار</span>
-              </button>
-            )}
-
             {/* User Profile / Login */}
             {currentUser ? (
               <div className="flex items-center gap-2">

@@ -131,6 +131,19 @@ export const SuperAdminPortal: React.FC<SuperAdminPortalProps> = ({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => {
+                if (window.confirm('هل أنت متأكد من رغبتك في تفريغ أي بيانات قديمة وبدء السجل نظيفاً فقط للمدارس الجديدة؟')) {
+                  localStorage.clear();
+                  window.location.href = window.location.pathname;
+                }
+              }}
+              className="p-2.5 rounded-2xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/30 text-rose-200 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
+              title="تفريغ ذاكرة المتصفح وبدء المنظومة نظيفة للمدارس الحقيقية فقط"
+            >
+              <RefreshCw className="w-3.5 h-3.5 text-rose-400" />
+              <span>تفريغ الذاكرة القديمة 🗑️</span>
+            </button>
             <div className="p-3 rounded-2xl bg-white/10 border border-white/15 text-center min-w-[90px]">
               <span className="text-[10px] text-purple-300 block">إجمالي المدارس</span>
               <strong className="text-lg font-black text-white">{schools.length}</strong>
@@ -229,7 +242,16 @@ export const SuperAdminPortal: React.FC<SuperAdminPortalProps> = ({
 
         {/* Schools Cards List */}
         <div className="space-y-4">
-          {filteredSchools.map((school) => {
+          {filteredSchools.length === 0 ? (
+            <div className="text-center py-16 px-6 bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl space-y-3">
+              <Building2 className="w-12 h-12 text-slate-400 mx-auto" />
+              <h3 className="text-base font-black text-slate-800">لا توجد مدارس مسجلة حتى الآن</h3>
+              <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+                المنظومة في وضع الإنتاج الفعلي النظيف. ستظهر المدارس الجديدة فور قيام مديري المدارس بالتسجيل أو إنشائها.
+              </p>
+            </div>
+          ) : (
+            filteredSchools.map((school) => {
             const schStudents = users.filter((u) => u.role === 'student' && u.schoolCode === school.code).length;
             const schTeachers = users.filter((u) => u.role === 'teacher' && u.schoolCode === school.code).length;
             const daysRemaining = getDaysRemaining(school.subscriptionExpiryDate);
@@ -394,7 +416,7 @@ export const SuperAdminPortal: React.FC<SuperAdminPortalProps> = ({
                 </div>
               </div>
             );
-          })}
+          }))}
         </div>
 
       </div>

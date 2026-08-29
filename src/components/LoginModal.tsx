@@ -49,15 +49,18 @@ export const LoginModal: React.FC<LoginModalProps> = ({
       return;
     }
 
-    // Super Admin special case
-    if (cleanNid === '9999999999' && (cleanPass === '9999' || cleanPass === 'admin')) {
+    // Super Admin special case (supports 9999999999 and 1000000000)
+    if (
+      (cleanNid === '9999999999' && (cleanPass === '9999' || cleanPass === 'admin' || cleanPass === 'Admin@12345')) ||
+      (cleanNid === '1000000000' && (cleanPass === 'Admin@12345' || cleanPass === 'admin' || cleanPass === '0000' || cleanPass === '9999'))
+    ) {
       const superUser = users.find((u) => u.role === 'superadmin') || {
         id: 'usr-superadmin',
         nationalId: '9999999999',
         name: 'المشرف العام - إدارة المنظومة',
-        mobile: '0500009999',
-        email: 'superadmin@hodork.sa',
-        password: '9999',
+        mobile: '0548171965',
+        email: 'admin@hodork.sa',
+        password: 'admin',
         role: 'superadmin',
         schoolCode: 'GLOBAL',
       };
@@ -117,9 +120,16 @@ export const LoginModal: React.FC<LoginModalProps> = ({
 
           {/* School Code Selection */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
-              <Building2 className="w-3.5 h-3.5 text-emerald-600" />
-              كود أو اسم المدرسة
+            <label className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <Building2 className="w-3.5 h-3.5 text-emerald-600" />
+                كود أو اسم المدرسة
+              </span>
+              {schools.length === 0 && (
+                <span className="text-[10px] text-emerald-600 font-normal">
+                  (بانتظار تسجيل المدارس الأولى)
+                </span>
+              )}
             </label>
             <select
               id="login-school-code"
@@ -127,11 +137,15 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               onChange={(e) => setSchoolCode(e.target.value)}
               className="w-full text-xs font-semibold bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-hidden"
             >
-              {schools.map((sch) => (
-                <option key={sch.id} value={sch.code}>
-                  {sch.name} ({sch.code})
-                </option>
-              ))}
+              {schools.length > 0 ? (
+                schools.map((sch) => (
+                  <option key={sch.id} value={sch.code}>
+                    {sch.name} ({sch.code})
+                  </option>
+                ))
+              ) : (
+                <option value="GLOBAL">إدارة المنظومة المركزية (المشرف العام)</option>
+              )}
             </select>
           </div>
 
@@ -207,6 +221,23 @@ export const LoginModal: React.FC<LoginModalProps> = ({
             <Lock className="w-4 h-4" />
             <span>تسجيل الدخول</span>
           </button>
+
+          {/* Quick SuperAdmin Helper Button */}
+          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span className="text-slate-400 text-[11px]">حساب المشرف العام:</span>
+            <button
+              type="button"
+              id="superadmin-quick-fill-btn"
+              onClick={() => {
+                setNationalId('9999999999');
+                setPassword('admin');
+                setErrorMsg('');
+              }}
+              className="text-[11px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-2 py-1 rounded-md transition-colors cursor-pointer"
+            >
+              تعبئة بيانات الإدارة تلقائياً ⚡
+            </button>
+          </div>
         </form>
 
       </div>
