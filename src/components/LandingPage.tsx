@@ -81,7 +81,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               className="px-6 py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm transition-all shadow-lg hover:shadow-emerald-500/25 cursor-pointer flex items-center gap-2"
             >
               <Building2 className="w-5 h-5" />
-              <span>تسجيل وإنشاء مدرسة جديدة مجاناً</span>
+              <span>تسجيل وإنشاء مدرسة جديدة مجاناً (30 يوماً)</span>
               <ArrowLeft className="w-4 h-4" />
             </button>
 
@@ -90,15 +90,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               className="px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm border border-white/20 transition-all cursor-pointer flex items-center gap-2"
             >
               <Users className="w-5 h-5" />
-              <span>تسجيل الدخول للمنسوبين</span>
-            </button>
-
-            <button
-              onClick={onOpenDemoSwitcher}
-              className="px-5 py-3.5 rounded-2xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 font-bold text-xs transition-all cursor-pointer flex items-center gap-2"
-            >
-              <Zap className="w-4 h-4 text-amber-400" />
-              <span>تجربة النظام المباشر (Demo)</span>
+              <span>تسجيل الدخول للمنسوبين والمدارس</span>
             </button>
           </div>
 
@@ -125,138 +117,53 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </div>
       </section>
 
-      {/* Direct Role Tryouts (تجربة الأدوار المباشرة) */}
+      {/* Direct School Registration & Trial Section */}
       <section className="space-y-6">
-        <div className="text-center space-y-1.5 max-w-xl mx-auto">
-          <span className="text-xs font-black text-emerald-700 uppercase tracking-wider">
-            تجربة فورية بضغطة واحدة
+        <div className="text-center space-y-2 max-w-2xl mx-auto">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-black">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+            <span>جاهز للإنتاج الفعلي والمدارس المعتمدة</span>
           </span>
           <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
-            استعرض النظام كما يراه كل مستخدم
+            ابدأ تجربة مدرستك الذكية لمدة 30 يوماً مجاناً
           </h2>
-          <p className="text-xs text-slate-500">
-            انقر على أي بطاقة لتجربة الواجهة الحقيقية بكامل وظائفها وبياناتها
+          <p className="text-sm text-slate-600 leading-relaxed">
+            أنشئ مدرستك الخاصة الآن في أقل من دقيقتين، واستفد من فترة تجربة مجانية كاملة لمدة شهر (30 يوماً) تشمل السياج الجغرافي، التحضير الذكي، مطابقة نور، وتقارير المدير.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          
-          {/* Admin Founder */}
-          <button
-            onClick={() => {
-              const emp = users.find((u) => u.nationalId === '1000472181');
-              if (emp) onSelectUser(emp);
-            }}
-            className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-emerald-500 hover:shadow-xl transition-all text-right flex flex-col justify-between space-y-4 cursor-pointer"
-          >
-            <div className="space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xl group-hover:scale-105 transition-transform">
-                <Building2 className="w-6 h-6 text-emerald-700" />
-              </div>
-              <div>
-                <h3 className="font-black text-slate-900 text-base group-hover:text-emerald-800">
-                  لوحة الموظف المؤسس (الإدارة)
-                </h3>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                  كشف التباين والهروب، إعدادات المدرسة والأوقات، إدارة المساعدين، وإصدار تقارير نور الرسمية.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center justify-between text-xs font-bold text-emerald-700 pt-2 border-t border-slate-100">
-              <span>هوية: 1000472181</span>
-              <span className="flex items-center gap-1 group-hover:-translate-x-1 transition-transform">
-                دخول التجربة ↵
+        <div className="bg-gradient-to-r from-emerald-900 via-slate-900 to-teal-950 rounded-3xl p-6 sm:p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 border border-emerald-500/30 shadow-xl">
+          <div className="space-y-2 max-w-xl">
+            <div className="flex items-center gap-2">
+              <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-400/30">
+                تجربة مجانية 30 يوماً
               </span>
+              <span className="text-xs text-amber-300 font-bold">بدون الحاجة لبطاقة ائتمان</span>
             </div>
-          </button>
+            <h3 className="text-xl sm:text-2xl font-black text-white">
+              أنشئ مدرستك الآن وجرب المنظومة مع طلابك ومعلميك
+            </h3>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              تحصل فوراً على كود مدرسي خاص، حساب إداري معتمد، استيراد بيانات الطلاب من نور عبر الإكسل، وتفعيل السياج الجغرافي بدقة متناهية.
+            </p>
+          </div>
 
-          {/* Teacher */}
-          <button
-            onClick={() => {
-              const tch = users.find((u) => u.nationalId === '1001691367');
-              if (tch) onSelectUser(tch);
-            }}
-            className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-xl transition-all text-right flex flex-col justify-between space-y-4 cursor-pointer"
-          >
-            <div className="space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold text-xl group-hover:scale-105 transition-transform">
-                <BookOpen className="w-6 h-6 text-blue-700" />
-              </div>
-              <div>
-                <h3 className="font-black text-slate-900 text-base group-hover:text-blue-800">
-                  لوحة المعلم والتحضير
-                </h3>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                  تحضير سريع للحصص بنقرة واحدة (الكل حاضر/غائب)، مع معاينة صور الطلاب دون تشويش.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center justify-between text-xs font-bold text-blue-700 pt-2 border-t border-slate-100">
-              <span>هوية: 1001691367</span>
-              <span className="flex items-center gap-1 group-hover:-translate-x-1 transition-transform">
-                دخول التجربة ↵
-              </span>
-            </div>
-          </button>
-
-          {/* Student */}
-          <button
-            onClick={() => {
-              const std = users.find((u) => u.nationalId === '2497120754');
-              if (std) onSelectUser(std);
-            }}
-            className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-amber-500 hover:shadow-xl transition-all text-right flex flex-col justify-between space-y-4 cursor-pointer"
-          >
-            <div className="space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-xl group-hover:scale-105 transition-transform">
-                <GraduationCap className="w-6 h-6 text-amber-700" />
-              </div>
-              <div>
-                <h3 className="font-black text-slate-900 text-base group-hover:text-amber-800">
-                  بوابة الطالب الذكية
-                </h3>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                  تسجيل الحضور بالسياج الجغرافي، رفع الصورة الشخصية، بطاقة الطالب الرقمية، وتقديم الأعذار الطبية.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center justify-between text-xs font-bold text-amber-700 pt-2 border-t border-slate-100">
-              <span>هوية: 2497120754</span>
-              <span className="flex items-center gap-1 group-hover:-translate-x-1 transition-transform">
-                دخول التجربة ↵
-              </span>
-            </div>
-          </button>
-
-          {/* Parent */}
-          <button
-            onClick={() => {
-              const parent = users.find((u) => u.nationalId === '1023456789');
-              if (parent) onSelectUser(parent);
-            }}
-            className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-teal-500 hover:shadow-xl transition-all text-right flex flex-col justify-between space-y-4 cursor-pointer"
-          >
-            <div className="space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-xl group-hover:scale-105 transition-transform">
-                <Users className="w-6 h-6 text-teal-700" />
-              </div>
-              <div>
-                <h3 className="font-black text-slate-900 text-base group-hover:text-teal-800">
-                  بوابة ولي الأمر
-                </h3>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                  ربط فوري لأبنائه بالهوية، إشعارات فورية بالحضور والغياب، وإرسال الملاحظات لإدارة المدرسة.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center justify-between text-xs font-bold text-teal-700 pt-2 border-t border-slate-100">
-              <span>هوية: 1023456789</span>
-              <span className="flex items-center gap-1 group-hover:-translate-x-1 transition-transform">
-                دخول التجربة ↵
-              </span>
-            </div>
-          </button>
-
+          <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+            <button
+              onClick={onOpenRegisterSchool}
+              className="px-6 py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm transition-all shadow-lg hover:shadow-emerald-500/25 cursor-pointer flex items-center gap-2"
+            >
+              <Building2 className="w-5 h-5" />
+              <span>تسجيل مدرسة جديدة الآن</span>
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onOpenLogin}
+              className="px-5 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 transition-all cursor-pointer"
+            >
+              دخول حساب مدرسة سابقة
+            </button>
+          </div>
         </div>
       </section>
 
@@ -489,56 +396,61 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           
           {/* Free Trial */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs flex flex-col justify-between space-y-6">
+          <div className="bg-white rounded-3xl p-6 border-2 border-slate-200 shadow-xs flex flex-col justify-between space-y-6">
             <div className="space-y-4">
               <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">
                 الباقة التجريبية
               </span>
               <div>
-                <h3 className="text-xl font-black text-slate-900">مجاناً لمدة 30 يوماً</h3>
-                <p className="text-xs text-slate-500 mt-1">لتجربة النظام في مدرستك بكامل الصلاحيات</p>
+                <h3 className="text-xl font-black text-slate-900">تجربة مجانية 30 يوماً</h3>
+                <p className="text-xs text-slate-500 mt-1">أنشئ مدرستك وجرب النظام بكامل الصلاحيات، ثم يتوقف النظام تلقائياً بعد 30 يوماً ما لم يتم الترقية</p>
               </div>
-              <div className="text-3xl font-black text-slate-900">0 <span className="text-xs font-normal text-slate-500">ريال / مدرسة</span></div>
+              <div className="text-3xl font-black text-slate-900">0 <span className="text-xs font-normal text-slate-500">ريال / 30 يوماً</span></div>
               
               <ul className="space-y-2.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>سياج جغرافي كامل حتى 250 طالب</span>
+                  <span>تفعيل تلقائي وفوري فور إنشاء المدرسة</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>كشف التباين والهروب الأساسي</span>
+                  <span>سياج جغرافي وتطبيق هاتف للطلاب والمعلمين</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>توليد كشوفات الحضور PDF</span>
+                  <span>كشف التباين والهروب ومطابقة نور</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span className="text-amber-800 font-bold">تتوقف الصلاحيات بعد 30 يوماً حتى التجديد</span>
                 </li>
               </ul>
             </div>
 
             <button
               onClick={onOpenRegisterSchool}
-              className="w-full py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors cursor-pointer"
+              className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5"
             >
-              ابدأ التجربة المجانية ↵
+              <Building2 className="w-4 h-4" />
+              <span>أنشئ مدرستك وابدأ التجربة (30 يوماً) ↵</span>
             </button>
           </div>
 
-          {/* Semester Plan (500 SAR) */}
+          {/* Semester Plan (450 SAR - as in Salla store) */}
           <div className="bg-white rounded-3xl p-6 border-2 border-emerald-500 shadow-xl flex flex-col justify-between space-y-6 relative overflow-hidden">
             <div className="absolute top-0 left-0 bg-emerald-600 text-white text-[10px] font-black px-4 py-1 rounded-br-2xl">
-              الأكثر طلباً للمدارس
+              اشتراك نصف سنوي
             </div>
 
             <div className="space-y-4">
               <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-black">
-                باقة الفصل الدراسي الواحد
+                اشتراك نصف سنوي - نظام حضورك الذكي
               </span>
               <div>
-                <h3 className="text-xl font-black text-slate-900">ترخيص فصلي معتمد</h3>
-                <p className="text-xs text-slate-500 mt-1">سداد عبر متجر سلة الإلكتروني أو uPay الراجحي</p>
+                <h3 className="text-xl font-black text-slate-900">منظومة الحضور والانصراف المدرسية</h3>
+                <p className="text-xs text-slate-500 mt-1">بالسياج الجغرافي وتقارير نور عبر متجر سلة</p>
               </div>
-              <div className="text-3xl font-black text-emerald-700">500 <span className="text-xs font-normal text-slate-500">ريال / فصل دراسي</span></div>
+              <div className="text-3xl font-black text-emerald-700">450 <span className="text-xs font-normal text-slate-500">ريال / نصف سنوي</span></div>
               
               <ul className="space-y-2.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
                 <li className="flex items-center gap-2">
@@ -555,7 +467,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>سداد سريع ومباشر عبر متجر سلة الإلكتروني</span>
+                  <span>سداد فوري وموثوق عبر متجر سلة</span>
                 </li>
               </ul>
             </div>
@@ -567,32 +479,32 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 rel="noreferrer"
                 className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition-colors cursor-pointer shadow-xs flex items-center justify-center gap-1.5"
               >
-                <span>🛒 سداد عبر متجر سلة (500 ريال) ↵</span>
+                <span>🛒 شراء عبر متجر سلة (450 ريال) ↵</span>
               </a>
               <button
                 onClick={() => onOpenPaymentModal ? onOpenPaymentModal('semester') : onOpenRegisterSchool()}
                 className="w-full py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-bold text-xs border border-emerald-200 transition-colors cursor-pointer flex items-center justify-center gap-1"
               >
-                <span>خيارات التحويل الأخرى (uPay)</span>
+                <span>خيارات السداد والتحويل المباشر</span>
               </button>
             </div>
           </div>
 
-          {/* Full Year Plan (950 SAR) */}
+          {/* Full Year Plan (800 SAR - as in Salla store) */}
           <div className="bg-white rounded-3xl p-6 border-2 border-amber-400/80 shadow-xl flex flex-col justify-between space-y-6 relative overflow-hidden">
             <div className="absolute top-0 left-0 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-[10px] font-black px-4 py-1 rounded-br-2xl">
-              الأفضل قيمة (توفير 50 ريال)
+              الأفضل قيمة (وفر 100 ريال)
             </div>
 
             <div className="space-y-4">
               <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-black">
-                باقة السنة الدراسية الكاملة
+                اشتراك سنوي - نظام حضورك الذكي
               </span>
               <div>
-                <h3 className="text-xl font-black text-slate-900">ترخيص سنوي شامل</h3>
-                <p className="text-xs text-slate-500 mt-1">سداد عبر متجر سلة الإلكتروني أو uPay الراجحي</p>
+                <h3 className="text-xl font-black text-slate-900">منظومة الحضور والانصراف المدرسية</h3>
+                <p className="text-xs text-slate-500 mt-1">بالسياج الجغرافي وتقارير نور عبر متجر سلة</p>
               </div>
-              <div className="text-3xl font-black text-emerald-700">950 <span className="text-xs font-normal text-slate-500">ريال / سنة دراسية</span></div>
+              <div className="text-3xl font-black text-emerald-700">800 <span className="text-xs font-normal text-slate-500">ريال / سنة كاملة</span></div>
               
               <ul className="space-y-2.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
                 <li className="flex items-center gap-2">
@@ -619,15 +531,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 href="https://salla.sa/Misstark"
                 target="_blank"
                 rel="noreferrer"
-                className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-xs transition-colors cursor-pointer shadow-xs flex items-center justify-center gap-1.5"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs transition-colors cursor-pointer shadow-xs flex items-center justify-center gap-1.5"
               >
-                <span>🛒 سداد عبر متجر سلة (950 ريال) ↵</span>
+                <span>🛒 شراء عبر متجر سلة (800 ريال) ↵</span>
               </a>
               <button
                 onClick={() => onOpenPaymentModal ? onOpenPaymentModal('yearly') : onOpenRegisterSchool()}
-                className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-1"
+                className="w-full py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-800 font-bold text-xs border border-slate-200 transition-colors cursor-pointer flex items-center justify-center gap-1"
               >
-                <span>خيارات التحويل الأخرى (uPay)</span>
+                <span>خيارات السداد والتحويل المباشر</span>
               </button>
             </div>
           </div>

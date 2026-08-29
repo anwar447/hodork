@@ -28,10 +28,12 @@ export function initializeStorageIfEmpty(): void {
       localStorage.setItem(STORAGE_KEYS.ATTENDANCES, JSON.stringify(initial.attendances));
       localStorage.setItem(STORAGE_KEYS.EXCUSES, JSON.stringify(initial.excuses));
       localStorage.setItem(STORAGE_KEYS.EMERGENCIES, JSON.stringify(initial.emergencies));
+      localStorage.setItem(STORAGE_KEYS.BEHAVIOR_DEDUCTIONS, JSON.stringify([]));
+      localStorage.setItem(STORAGE_KEYS.BEHAVIOR_NOTES, JSON.stringify([]));
       
-      // Default to founder employee
-      localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(initial.users[1])); // Founder
-      localStorage.setItem(STORAGE_KEYS.SELECTED_SCHOOL_CODE, 'RAYA-1448');
+      // Default to null user (Landing Page)
+      localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+      localStorage.removeItem(STORAGE_KEYS.SELECTED_SCHOOL_CODE);
     }
   } catch (err) {
     console.error('Failed to initialize storage:', err);
@@ -47,8 +49,8 @@ export function resetToDefaultSeed(): void {
   localStorage.setItem(STORAGE_KEYS.EMERGENCIES, JSON.stringify(initial.emergencies));
   localStorage.setItem(STORAGE_KEYS.BEHAVIOR_DEDUCTIONS, JSON.stringify([]));
   localStorage.setItem(STORAGE_KEYS.BEHAVIOR_NOTES, JSON.stringify([]));
-  localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(initial.users[1]));
-  localStorage.setItem(STORAGE_KEYS.SELECTED_SCHOOL_CODE, 'RAYA-1448');
+  localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+  localStorage.removeItem(STORAGE_KEYS.SELECTED_SCHOOL_CODE);
 }
 
 /**

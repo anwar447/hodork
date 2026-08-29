@@ -36,8 +36,8 @@ export const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
   };
 
   const getAmount = () => {
-    if (selectedPlan === 'semester') return '500';
-    if (selectedPlan === 'yearly') return '950';
+    if (selectedPlan === 'semester') return '450';
+    if (selectedPlan === 'yearly') return '800';
     return '0';
   };
 
@@ -113,11 +113,11 @@ export const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <strong className="text-sm font-black text-slate-900 block">الفصل الدراسي الواحد</strong>
+                    <strong className="text-sm font-black text-slate-900 block">اشتراك نصف سنوي</strong>
                     <span className="text-[11px] text-slate-500">فصل دراسي كامل بكافة الصلاحيات</span>
                   </div>
                   <div className="text-right">
-                    <span className="text-lg font-black text-emerald-700">500</span>
+                    <span className="text-lg font-black text-emerald-700">450</span>
                     <span className="text-[10px] text-slate-500 mr-1">ريال</span>
                   </div>
                 </div>
@@ -138,21 +138,21 @@ export const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
                 }`}
               >
                 <span className="absolute top-0 left-0 bg-amber-500 text-slate-950 font-black text-[9px] px-2.5 py-0.5 rounded-br-lg">
-                  الأفضل قيمة (توفير)
+                  الأفضل قيمة (توفير 100 ريال)
                 </span>
                 <div className="flex items-start justify-between">
                   <div>
-                    <strong className="text-sm font-black text-slate-900 block">السنة الدراسية الكاملة</strong>
+                    <strong className="text-sm font-black text-slate-900 block">اشتراك سنوي كامل</strong>
                     <span className="text-[11px] text-slate-500">عام دراسي كامل متواصل</span>
                   </div>
                   <div className="text-right">
-                    <span className="text-lg font-black text-emerald-700">950</span>
+                    <span className="text-lg font-black text-emerald-700">800</span>
                     <span className="text-[10px] text-slate-500 mr-1">ريال</span>
                   </div>
                 </div>
                 <div className="text-[10px] text-emerald-800 font-bold flex items-center gap-1">
                   <Sparkles className="w-3 h-3 text-amber-500" />
-                  <span>توفير 50 ريال + دعم فني VIP وتحديثات</span>
+                  <span>توفير 100 ريال + دعم فني VIP وتحديثات</span>
                 </div>
               </button>
 

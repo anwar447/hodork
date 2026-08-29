@@ -728,7 +728,7 @@ export const SchoolCreationWizard: React.FC<SchoolCreationWizardProps> = ({
               {/* Plans Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 
-                {/* Semester Plan (500 SAR) */}
+                {/* Semester Plan (450 SAR) */}
                 <button
                   type="button"
                   onClick={() => setSelectedPlan('semester')}
@@ -740,8 +740,8 @@ export const SchoolCreationWizard: React.FC<SchoolCreationWizardProps> = ({
                 >
                   <div>
                     <div className="flex items-center justify-between">
-                      <div className="font-black text-slate-900 text-sm">الفصل الدراسي الواحد</div>
-                      <span className="text-xs font-black text-emerald-700 font-mono">500 ريال</span>
+                      <div className="font-black text-slate-900 text-sm">اشتراك نصف سنوي</div>
+                      <span className="text-xs font-black text-emerald-700 font-mono">450 ريال</span>
                     </div>
                     <div className="text-emerald-700 font-bold text-xs mt-0.5">ترخيص فصلي كامل</div>
                     <p className="text-[11px] text-slate-500 mt-1">كافة مميزات السياج ومطابقة نور والتقارير</p>
@@ -751,7 +751,7 @@ export const SchoolCreationWizard: React.FC<SchoolCreationWizardProps> = ({
                   </span>
                 </button>
 
-                {/* Yearly Plan (950 SAR) */}
+                {/* Yearly Plan (800 SAR) */}
                 <button
                   type="button"
                   onClick={() => setSelectedPlan('yearly')}
@@ -762,12 +762,12 @@ export const SchoolCreationWizard: React.FC<SchoolCreationWizardProps> = ({
                   }`}
                 >
                   <span className="absolute top-0 left-0 bg-amber-500 text-slate-950 font-black text-[9px] px-2 py-0.5 rounded-br-lg">
-                    توفير 50 ريال
+                    توفير 100 ريال
                   </span>
                   <div>
                     <div className="flex items-center justify-between">
-                      <div className="font-black text-slate-900 text-sm">السنة الدراسية الكاملة</div>
-                      <span className="text-xs font-black text-emerald-700 font-mono">950 ريال</span>
+                      <div className="font-black text-slate-900 text-sm">اشتراك سنوي كامل</div>
+                      <span className="text-xs font-black text-emerald-700 font-mono">800 ريال</span>
                     </div>
                     <div className="text-emerald-700 font-bold text-xs mt-0.5">عام دراسي كامل</div>
                     <p className="text-[11px] text-slate-500 mt-1">استيعاب غير محدود ودعم فني VIP</p>
@@ -843,7 +843,7 @@ export const SchoolCreationWizard: React.FC<SchoolCreationWizardProps> = ({
                     <div className="text-right">
                       <span className="text-xs text-slate-300">المبلغ المطلوب: </span>
                       <strong className="text-lg font-black text-amber-300 font-mono">
-                        {selectedPlan === 'semester' ? '500 ريال (فصلي)' : '950 ريال (سنوي)'}
+                        {selectedPlan === 'semester' ? '450 ريال (نصف سنوي)' : '800 ريال (سنوي)'}
                       </strong>
                     </div>
                   </div>

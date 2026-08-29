@@ -41,6 +41,8 @@ import { SuperAdminPortal } from './components/SuperAdminPortal';
 import { LandingPage } from './components/LandingPage';
 import { SchoolCreationWizard } from './components/SchoolCreationWizard';
 import { PaymentInfoModal } from './components/PaymentInfoModal';
+import { SubscriptionExpiredModal } from './components/SubscriptionExpiredModal';
+import { InstallAppBanner } from './components/InstallAppBanner';
 import { AcademicHolidayBanner } from './components/AcademicHolidayBanner';
 import { requestWebNotificationPermission, triggerNotification } from './utils/notifications';
 import { getAcademicDayStatus, THEME_CONFIGS } from './utils/academicCalendar';
@@ -349,7 +351,21 @@ export default function App() {
           />
         )}
         
-        {!currentUser ? (
+        {/* Subscription Expired / Suspended Guard */}
+        {currentUser && currentUser.role !== 'superadmin' && currentSchool && (currentSchool.isSuspended || (currentSchool.subscriptionExpiryDate && new Date(currentSchool.subscriptionExpiryDate).getTime() < new Date().setHours(0,0,0,0))) ? (
+          <SubscriptionExpiredModal
+            isOpen={true}
+            school={currentSchool}
+            onOpenPaymentModal={(plan) => {
+              setPaymentModalState({
+                isOpen: true,
+                plan: plan,
+                schoolName: currentSchool.name,
+              });
+            }}
+            onLogout={handleLogout}
+          />
+        ) : !currentUser ? (
           // Rich Interactive Landing Page
           <LandingPage
             schools={schools}
@@ -441,20 +457,25 @@ export default function App() {
 
       </main>
 
-      {/* Floating Role Switcher Pill for instant demonstration switching */}
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 bg-slate-900/90 text-white backdrop-blur-md px-4 py-2 rounded-full shadow-2xl border border-white/20 flex items-center gap-3 text-xs">
-        <button
-          onClick={() => setIsDemoSwitcherOpen(true)}
-          className="flex items-center gap-1.5 font-bold hover:text-emerald-400 transition-colors cursor-pointer"
-        >
-          <Sparkles className="w-4 h-4 text-amber-400 animate-spin" style={{ animationDuration: '4s' }} />
-          <span>تبديل الدور التجريبي</span>
-        </button>
-        <span className="opacity-30">|</span>
-        <span className="text-[11px] text-slate-300 font-medium">
-          الدور الحالي: <strong className="text-white font-bold">{currentUser ? (currentUser.role === 'employee' ? 'إداري' : currentUser.role === 'teacher' ? 'معلم' : currentUser.role === 'student' ? 'طالب' : currentUser.role === 'parent' ? 'ولي أمر' : 'سوبر أدمن') : 'زائر'}</strong>
-        </span>
-      </div>
+      {/* Floating Role Switcher Pill for Superadmin or Quick Role Demo when users exist */}
+      {currentUser?.role === 'superadmin' && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 bg-slate-900/90 text-white backdrop-blur-md px-4 py-2 rounded-full shadow-2xl border border-white/20 flex items-center gap-3 text-xs">
+          <button
+            onClick={() => setIsDemoSwitcherOpen(true)}
+            className="flex items-center gap-1.5 font-bold hover:text-emerald-400 transition-colors cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4 text-amber-400 animate-spin" style={{ animationDuration: '4s' }} />
+            <span>لوحة تجربة الأدوار</span>
+          </button>
+          <span className="opacity-30">|</span>
+          <span className="text-[11px] text-slate-300 font-medium">
+            المشرف العام (مالك المنظومة)
+          </span>
+        </div>
+      )}
+
+      {/* PWA App Install Suggestion Banner */}
+      <InstallAppBanner />
 
       {/* Modals & Wizards */}
       <LoginModal

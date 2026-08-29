@@ -127,16 +127,17 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
 
-            {/* Quick Demo Switcher Button */}
-            <button
-              id="header-demo-switcher-btn"
-              onClick={onOpenDemoSwitcher}
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-bold transition-all cursor-pointer shadow-2xs"
-            >
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <span className="hidden sm:inline">تبديل الحساب التجريبي</span>
-              <span className="sm:hidden">تجربة الأدوار</span>
-            </button>
+            {/* Super Admin Quick Switcher Button */}
+            {currentUser?.role === 'superadmin' && (
+              <button
+                id="header-demo-switcher-btn"
+                onClick={onOpenDemoSwitcher}
+                className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-purple-100 hover:bg-purple-200 text-purple-900 border border-purple-200 text-xs font-bold transition-all cursor-pointer shadow-2xs"
+              >
+                <Sparkles className="w-4 h-4 text-purple-600" />
+                <span className="hidden sm:inline">لوحة الأدوار</span>
+              </button>
+            )}
 
             {/* User Profile / Login */}
             {currentUser ? (

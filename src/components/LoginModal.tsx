@@ -207,23 +207,6 @@ export const LoginModal: React.FC<LoginModalProps> = ({
             <Lock className="w-4 h-4" />
             <span>تسجيل الدخول</span>
           </button>
-
-          {/* Demo helper banner */}
-          <div className="pt-3 border-t border-slate-100 text-center">
-            <button
-              type="button"
-              id="login-demo-helper-btn"
-              onClick={() => {
-                onClose();
-                onOpenDemoSwitcher();
-              }}
-              className="inline-flex items-center gap-1.5 text-xs text-emerald-700 hover:text-emerald-800 font-bold hover:underline cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              <span>أو جرّب أحد الحسابات التجريبية الجاهزة بنقرة واحدة</span>
-            </button>
-          </div>
-
         </form>
 
       </div>
