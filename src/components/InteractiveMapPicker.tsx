@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MapPin, Navigation, ZoomIn, ZoomOut, Search, Check, Layers, AlertCircle } from 'lucide-react';
+import { MapPin, Navigation, ZoomIn, ZoomOut, Search, Check, Layers, AlertCircle, RefreshCw, Crosshair } from 'lucide-react';
 
 interface InteractiveMapPickerProps {
   latitude: number;
@@ -39,22 +39,29 @@ export const InteractiveMapPicker: React.FC<InteractiveMapPickerProps> = ({
   longitude,
   radius,
   onChange,
-  height = '360px',
+  height = '340px',
 }) => {
   const [zoom, setZoom] = useState(16);
   const [isLocating, setIsLocating] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [mapType, setMapType] = useState<'streets' | 'satellite'>('streets');
   const [geoError, setGeoError] = useState<string | null>(null);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef<{ x: number; y: number; lat: number; lng: number } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Approximate GPS to Pixel math for tile preview
-  // OpenStreetMap tile coordinates
+  // Convert lat/lng to tile numbers
   const latRad = (latitude * Math.PI) / 180;
   const n = Math.pow(2, zoom);
-  const xTile = Math.floor(((longitude + 180) / 360) * n);
-  const yTile = Math.floor(((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * n);
+  const xCenter = ((longitude + 180) / 360) * n;
+  const yCenter = ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * n;
 
-  const containerRef = useRef<HTMLDivElement>(null);
+  // Pre-calculate 3x3 grid tiles around the center
+  const baseTileX = Math.floor(xCenter);
+  const baseTileY = Math.floor(yCenter);
+  const fracX = (xCenter - baseTileX) * 256;
+  const fracY = (yCenter - baseTileY) * 256;
 
   // Handle GPS Auto-detect
   const handleGetCurrentLocation = () => {
@@ -69,12 +76,12 @@ export const InteractiveMapPicker: React.FC<InteractiveMapPickerProps> = ({
         setIsLocating(false);
         const lat = Number(pos.coords.latitude.toFixed(6));
         const lng = Number(pos.coords.longitude.toFixed(6));
-        onChange({ lat, lng, address: 'موقعي الحالي (تم التحديد بنجاح)' });
+        onChange({ lat, lng, address: 'موقعي الحالي (GPS)' });
         setZoom(17);
       },
       (err) => {
         setIsLocating(false);
-        setGeoError('يرجى السماح بصلاحية الموقع من إعدادات المتصفح أو تحديد المكان على الخريطة');
+        setGeoError('يرجى السماح بصلاحية الموقع من إعدادات المتصفح');
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
@@ -90,7 +97,41 @@ export const InteractiveMapPicker: React.FC<InteractiveMapPickerProps> = ({
     }
   };
 
-  // Handle click on canvas/map area to reposition pin
+  // Handle Drag / Pan Map
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    dragStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      lat: latitude,
+      lng: longitude,
+    };
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !dragStartRef.current) return;
+    const dx = e.clientX - dragStartRef.current.x;
+    const dy = e.clientY - dragStartRef.current.y;
+    setDragOffset({ x: dx, y: dy });
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (!isDragging || !dragStartRef.current) return;
+    setIsDragging(false);
+    const dx = e.clientX - dragStartRef.current.x;
+    const dy = e.clientY - dragStartRef.current.y;
+    setDragOffset({ x: 0, y: 0 });
+
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+      // Calculate new center
+      const metersPerPixel = (156543.03392 * Math.cos(latRad)) / Math.pow(2, zoom);
+      const newLat = Number((dragStartRef.current.lat + (dy * metersPerPixel) / 111320).toFixed(6));
+      const newLng = Number((dragStartRef.current.lng - (dx * metersPerPixel) / (111320 * Math.cos(latRad))).toFixed(6));
+      onChange({ lat: newLat, lng: newLng });
+    }
+  };
+
+  // Click on map to place pin
   const handleMapClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -102,16 +143,12 @@ export const InteractiveMapPicker: React.FC<InteractiveMapPickerProps> = ({
     const deltaX = clickX - centerX;
     const deltaY = clickY - centerY;
 
-    // Convert pixel delta to approximate lat/lng delta based on zoom
-    const metersPerPixel = (156543.03392 * Math.cos(latRad)) / Math.pow(2, zoom);
-    const deltaMetersX = deltaX * metersPerPixel;
-    const deltaMetersY = -deltaY * metersPerPixel;
-
-    // 1 deg lat ~ 111,320m, 1 deg lng ~ 111,320 * cos(lat)
-    const newLat = Number((latitude + deltaMetersY / 111320).toFixed(6));
-    const newLng = Number((longitude + deltaMetersX / (111320 * Math.cos(latRad))).toFixed(6));
-
-    onChange({ lat: newLat, lng: newLng });
+    if (Math.abs(deltaX) > 8 || Math.abs(deltaY) > 8) {
+      const metersPerPixel = (156543.03392 * Math.cos(latRad)) / Math.pow(2, zoom);
+      const newLat = Number((latitude - (deltaY * metersPerPixel) / 111320).toFixed(6));
+      const newLng = Number((longitude + (deltaX * metersPerPixel) / (111320 * Math.cos(latRad))).toFixed(6));
+      onChange({ lat: newLat, lng: newLng });
+    }
   };
 
   // Filter city suggestions
@@ -119,9 +156,31 @@ export const InteractiveMapPicker: React.FC<InteractiveMapPickerProps> = ({
     c.includes(searchQuery.trim())
   );
 
+  // Generate 5x5 grid of tile URLs
+  const tiles = [];
+  for (let dy = -2; dy <= 2; dy++) {
+    for (let dx = -2; dx <= 2; dx++) {
+      const tx = baseTileX + dx;
+      const ty = baseTileY + dy;
+      const key = `${zoom}-${tx}-${ty}`;
+      
+      const url =
+        mapType === 'satellite'
+          ? `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${zoom}/${ty}/${tx}`
+          : `https://tile.openstreetmap.org/${zoom}/${tx}/${ty}.png`;
+
+      tiles.push({
+        key,
+        dx,
+        dy,
+        url,
+      });
+    }
+  }
+
   return (
     <div className="space-y-3 font-sans" dir="rtl">
-      {/* Top Search & Quick Jump Bar */}
+      {/* Top Search & Actions Bar */}
       <div className="flex flex-wrap gap-2 items-center justify-between">
         <div className="relative flex-1 min-w-[220px]">
           <Search className="w-4 h-4 text-slate-400 absolute right-3 top-2.5" />
@@ -149,7 +208,7 @@ export const InteractiveMapPicker: React.FC<InteractiveMapPickerProps> = ({
           )}
         </div>
 
-        {/* Action Buttons */}
+        {/* Action Controls */}
         <div className="flex items-center gap-1.5">
           <button
             type="button"
@@ -166,10 +225,10 @@ export const InteractiveMapPicker: React.FC<InteractiveMapPickerProps> = ({
             type="button"
             onClick={() => setMapType(mapType === 'streets' ? 'satellite' : 'streets')}
             className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-1 border border-slate-200"
-            title="تغيير نمط الخريطة"
+            title="تبديل الخريطة بين شوارع وقمر صناعي"
           >
             <Layers className="w-3.5 h-3.5" />
-            <span>{mapType === 'streets' ? 'قمر صناعي' : 'خريطة شوارع'}</span>
+            <span>{mapType === 'streets' ? 'قمر صناعي 🛰️' : 'شوارع 🗺️'}</span>
           </button>
         </div>
       </div>
@@ -181,55 +240,78 @@ export const InteractiveMapPicker: React.FC<InteractiveMapPickerProps> = ({
         </div>
       )}
 
-      {/* Interactive Map Visual Container */}
+      {/* Real Interactive Tile Map Canvas */}
       <div
         ref={containerRef}
-        onClick={handleMapClick}
         style={{ height }}
-        className="relative w-full rounded-2xl overflow-hidden border-2 border-emerald-500/80 shadow-md bg-slate-100 cursor-crosshair select-none group"
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onClick={handleMapClick}
+        className="relative w-full rounded-2xl overflow-hidden border-2 border-emerald-500/80 shadow-md bg-slate-200 cursor-grab active:cursor-grabbing select-none group touch-none"
       >
-        {/* Real Dynamic Map Tile Background (OSM / Esri World Imagery) */}
-        <iframe
-          title="School Location Map"
-          className="w-full h-full border-0 pointer-events-none"
-          src={
-            mapType === 'satellite'
-              ? `https://maps.google.com/maps?q=${latitude},${longitude}&t=k&z=${zoom}&ie=UTF8&iwloc=&output=embed`
-              : `https://maps.google.com/maps?q=${latitude},${longitude}&t=m&z=${zoom}&ie=UTF8&iwloc=&output=embed`
-          }
-        />
+        {/* Tiles Grid Layer */}
+        <div
+          className="absolute inset-0 transition-transform duration-75 pointer-events-none"
+          style={{
+            transform: `translate(${dragOffset.x}px, ${dragOffset.y}px)`,
+          }}
+        >
+          {tiles.map((tile) => {
+            const left = `calc(50% + ${tile.dx * 256 - fracX}px)`;
+            const top = `calc(50% + ${tile.dy * 256 - fracY}px)`;
+            return (
+              <img
+                key={tile.key}
+                src={tile.url}
+                alt="map tile"
+                loading="eager"
+                crossOrigin="anonymous"
+                className="absolute w-[256px] h-[256px] object-cover pointer-events-none select-none max-w-none"
+                style={{
+                  left,
+                  top,
+                }}
+                onError={(e) => {
+                  // Fallback tile on network drop
+                  const target = e.target as HTMLImageElement;
+                  target.src = 'https://tile.openstreetmap.org/0/0/0.png';
+                }}
+              />
+            );
+          })}
+        </div>
 
-        {/* Map Center Pin Indicator Overlay */}
+        {/* Center Geofence Radius Circle */}
         <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-          {/* Geofence Perimeter Radius Circle */}
           <div
             style={{
-              width: `${Math.min(280, Math.max(70, radius * 0.35))}px`,
-              height: `${Math.min(280, Math.max(70, radius * 0.35))}px`,
+              width: `${Math.min(260, Math.max(60, radius * 0.35))}px`,
+              height: `${Math.min(260, Math.max(60, radius * 0.35))}px`,
             }}
-            className="rounded-full border-2 border-dashed border-emerald-500 bg-emerald-500/15 animate-pulse flex items-center justify-center"
+            className="rounded-full border-2 border-dashed border-emerald-500 bg-emerald-500/20 animate-pulse flex items-center justify-center"
           >
-            <span className="bg-emerald-900/80 text-white text-[9px] font-mono px-1.5 py-0.5 rounded-full font-bold shadow-xs">
-              نطاق التحضير: {radius}م
+            <span className="bg-emerald-950/80 text-emerald-300 text-[10px] font-mono px-2 py-0.5 rounded-full font-bold shadow-xs">
+              نطاق التحضير: {radius} متر
             </span>
           </div>
 
-          {/* Center Red Drop Pin */}
-          <div className="absolute flex flex-col items-center -translate-y-6">
+          {/* Interactive Red Drop Pin in Center */}
+          <div className="absolute flex flex-col items-center -translate-y-7 pointer-events-none">
             <div className="relative">
-              <MapPin className="w-9 h-9 text-rose-600 fill-rose-500 drop-shadow-lg filter" />
-              <div className="w-2.5 h-2.5 bg-white rounded-full absolute top-2 left-1/2 -translate-x-1/2" />
+              <MapPin className="w-10 h-10 text-rose-600 fill-rose-500 drop-shadow-xl filter" />
+              <div className="w-3 h-3 bg-white rounded-full absolute top-2 left-1/2 -translate-x-1/2 shadow-xs" />
             </div>
-            <div className="w-3 h-1.5 bg-black/40 rounded-full blur-[1px] -mt-1" />
+            <div className="w-4 h-2 bg-black/40 rounded-full blur-[2px] -mt-1" />
           </div>
         </div>
 
-        {/* Map Controls */}
-        <div className="absolute left-3 top-3 flex flex-col gap-1 z-10" onClick={(e) => e.stopPropagation()}>
+        {/* Floating Zoom & Recenter Controls */}
+        <div className="absolute left-3 top-3 flex flex-col gap-1.5 z-20" onClick={(e) => e.stopPropagation()}>
           <button
             type="button"
-            onClick={() => setZoom(Math.min(20, zoom + 1))}
-            className="w-8 h-8 bg-white/90 backdrop-blur-xs hover:bg-white text-slate-800 rounded-lg shadow-md flex items-center justify-center font-bold text-sm border border-slate-200"
+            onClick={() => setZoom(Math.min(19, zoom + 1))}
+            className="w-8 h-8 bg-white/95 hover:bg-white text-slate-800 rounded-xl shadow-md flex items-center justify-center font-bold text-sm border border-slate-200 cursor-pointer"
             title="تكبير الخريطة"
           >
             <ZoomIn className="w-4 h-4" />
@@ -237,29 +319,37 @@ export const InteractiveMapPicker: React.FC<InteractiveMapPickerProps> = ({
           <button
             type="button"
             onClick={() => setZoom(Math.max(10, zoom - 1))}
-            className="w-8 h-8 bg-white/90 backdrop-blur-xs hover:bg-white text-slate-800 rounded-lg shadow-md flex items-center justify-center font-bold text-sm border border-slate-200"
+            className="w-8 h-8 bg-white/95 hover:bg-white text-slate-800 rounded-xl shadow-md flex items-center justify-center font-bold text-sm border border-slate-200 cursor-pointer"
             title="تصغير الخريطة"
           >
             <ZoomOut className="w-4 h-4" />
           </button>
+          <button
+            type="button"
+            onClick={handleGetCurrentLocation}
+            className="w-8 h-8 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-md flex items-center justify-center font-bold text-sm border border-emerald-500 cursor-pointer"
+            title="موقعي الحالي"
+          >
+            <Crosshair className="w-4 h-4" />
+          </button>
         </div>
 
-        {/* Visual Tip Badge */}
-        <div className="absolute bottom-2 right-2 left-2 z-10 pointer-events-none">
-          <div className="bg-slate-900/85 backdrop-blur-xs text-white text-[11px] font-bold py-1.5 px-3 rounded-xl flex items-center justify-between shadow-lg">
-            <span className="flex items-center gap-1">
+        {/* Tip & Coordinates Bar */}
+        <div className="absolute bottom-2 right-2 left-2 z-20 pointer-events-none">
+          <div className="bg-slate-950/80 backdrop-blur-xs text-white text-[11px] font-bold py-1.5 px-3 rounded-xl flex items-center justify-between shadow-lg border border-white/10">
+            <span className="flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5 text-emerald-400" />
-              اضغط على أي مكان في الخريطة لنقل الدبوس فوراً 📍
+              <span>اسحب الخريطة أو اضغط في أي مكان لتحديد موقع المدرسة 📍</span>
             </span>
             <span className="font-mono text-emerald-300 text-[10px] dir-ltr">
-              {latitude.toFixed(4)}, {longitude.toFixed(4)}
+              {latitude.toFixed(5)}, {longitude.toFixed(5)}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Manual Fine-Tuning Coordinates (Collapsible / Refined) */}
-      <div className="bg-slate-50/80 border border-slate-200 rounded-xl p-2.5 flex items-center justify-between text-xs text-slate-700">
+      {/* Manual Coordinates */}
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-2.5 flex items-center justify-between text-xs text-slate-700">
         <div className="flex items-center gap-3">
           <div>
             <span className="text-[10px] text-slate-500 font-bold ml-1">خط العرض:</span>
@@ -284,7 +374,7 @@ export const InteractiveMapPicker: React.FC<InteractiveMapPickerProps> = ({
         </div>
         <div className="text-[11px] font-bold text-emerald-700 flex items-center gap-1">
           <Check className="w-3.5 h-3.5" />
-          <span>الموقع محدد ومعتمد بدقة</span>
+          <span>الموقع معتمد للسياج الجغرافي</span>
         </div>
       </div>
     </div>

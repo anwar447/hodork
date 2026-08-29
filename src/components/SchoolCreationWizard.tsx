@@ -239,35 +239,55 @@ export const SchoolCreationWizard: React.FC<SchoolCreationWizardProps> = ({
         </div>
 
         {/* Step Progress Indicators */}
-        <div className="bg-slate-50 px-6 py-3 border-b border-slate-200 flex items-center justify-between text-xs font-bold text-slate-500">
-          <div className={`flex items-center gap-1.5 ${step === 1 ? 'text-emerald-700' : ''}`}>
+        <div className="bg-slate-50 px-6 py-3 border-b border-slate-200 flex items-center justify-between text-xs font-bold text-slate-500 overflow-x-auto">
+          <button
+            type="button"
+            onClick={() => setStep(1)}
+            className={`flex items-center gap-1.5 cursor-pointer hover:text-emerald-700 transition-colors ${step === 1 ? 'text-emerald-700 font-black' : ''}`}
+          >
             <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${step === 1 ? 'bg-emerald-600 text-white' : 'bg-slate-200'}`}>1</span>
             <span>البيانات الأساسية</span>
-          </div>
-          <ChevronLeft className="w-4 h-4 text-slate-300" />
+          </button>
+          <ChevronLeft className="w-4 h-4 text-slate-300 shrink-0" />
           
-          <div className={`flex items-center gap-1.5 ${step === 2 ? 'text-emerald-700' : ''}`}>
+          <button
+            type="button"
+            onClick={() => setStep(2)}
+            className={`flex items-center gap-1.5 cursor-pointer hover:text-emerald-700 transition-colors ${step === 2 ? 'text-emerald-700 font-black' : ''}`}
+          >
             <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${step === 2 ? 'bg-emerald-600 text-white' : 'bg-slate-200'}`}>2</span>
-            <span>السياج والموقع</span>
-          </div>
-          <ChevronLeft className="w-4 h-4 text-slate-300" />
+            <span>📍 السياج والخريطة</span>
+          </button>
+          <ChevronLeft className="w-4 h-4 text-slate-300 shrink-0" />
 
-          <div className={`flex items-center gap-1.5 ${step === 3 ? 'text-emerald-700' : ''}`}>
+          <button
+            type="button"
+            onClick={() => setStep(3)}
+            className={`flex items-center gap-1.5 cursor-pointer hover:text-emerald-700 transition-colors ${step === 3 ? 'text-emerald-700 font-black' : ''}`}
+          >
             <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${step === 3 ? 'bg-emerald-600 text-white' : 'bg-slate-200'}`}>3</span>
             <span>مواقيت الدوام</span>
-          </div>
-          <ChevronLeft className="w-4 h-4 text-slate-300" />
+          </button>
+          <ChevronLeft className="w-4 h-4 text-slate-300 shrink-0" />
 
-          <div className={`flex items-center gap-1.5 ${step === 4 ? 'text-emerald-700' : ''}`}>
+          <button
+            type="button"
+            onClick={() => setStep(4)}
+            className={`flex items-center gap-1.5 cursor-pointer hover:text-emerald-700 transition-colors ${step === 4 ? 'text-emerald-700 font-black' : ''}`}
+          >
             <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${step === 4 ? 'bg-emerald-600 text-white' : 'bg-slate-200'}`}>4</span>
             <span>المساعدين</span>
-          </div>
-          <ChevronLeft className="w-4 h-4 text-slate-300" />
+          </button>
+          <ChevronLeft className="w-4 h-4 text-slate-300 shrink-0" />
 
-          <div className={`flex items-center gap-1.5 ${step === 5 ? 'text-emerald-700' : ''}`}>
+          <button
+            type="button"
+            onClick={() => setStep(5)}
+            className={`flex items-center gap-1.5 cursor-pointer hover:text-emerald-700 transition-colors ${step === 5 ? 'text-emerald-700 font-black' : ''}`}
+          >
             <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${step === 5 ? 'bg-emerald-600 text-white' : 'bg-slate-200'}`}>5</span>
             <span>الباقة والتأكيد</span>
-          </div>
+          </button>
         </div>
 
         {/* Modal Body: Steps */}
@@ -401,6 +421,21 @@ export const SchoolCreationWizard: React.FC<SchoolCreationWizardProps> = ({
                     />
                   </div>
                 </div>
+              </div>
+
+              {/* Step 1 to Step 2 Direct Action */}
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => setStep(2)}
+                  className="w-full py-3 px-4 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 rounded-2xl text-emerald-900 font-bold text-xs flex items-center justify-between transition-all cursor-pointer shadow-xs"
+                >
+                  <span className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-emerald-600 animate-bounce" />
+                    <span>الخطوة التالية: فتح خريطة المدرسة وتحديد موقع الدبوس والسياج (Geofence) 📍</span>
+                  </span>
+                  <ChevronLeft className="w-4 h-4 text-emerald-700" />
+                </button>
               </div>
 
             </div>
